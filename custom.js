@@ -4,6 +4,10 @@ var through = require('through')
 
 var processEnvPattern = /\bprocess\.env\b/
 
+var transformOpts = {
+  sourceType: 'module',
+};
+
 module.exports = function(rootEnv) {
   rootEnv = rootEnv || process.env || {}
 
@@ -25,7 +29,7 @@ module.exports = function(rootEnv) {
       if (processEnvPattern.test(source)) {
         try {
           var visitors = createVisitors([argv, rootEnv])
-          source = jstransform.transform(visitors, source).code
+          source = jstransform.transform(visitors, source, transformOpts).code
         } catch(err) {
           return this.emit('error', err)
         }
